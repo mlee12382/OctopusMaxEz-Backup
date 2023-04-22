@@ -23,7 +23,6 @@ cors_domains =
 [database]
 
 [file_manager]
-queue_gcode_uploads = True
 enable_object_processing = True
 
 [octoprint_compat]
@@ -46,12 +45,6 @@ channel = stable
 repo = fluidd-core/fluidd
 path = ~/fluidd
 
-[update_manager CanBoot]
-type = git_repo
-path = ~/CanBoot
-origin = https://github.com/Arksine/CanBoot.git
-is_system_service = False
-
 [update_manager moonraker-obico]
 type = git_repo
 path = ~/moonraker-obico
@@ -62,10 +55,23 @@ install_script = install.sh
 managed_services = 
 	moonraker-obico
 
+[update_manager CanBoot]
+type = git_repo
+path = ~/CanBoot
+origin = https://github.com/Arksine/CanBoot.git
+is_system_service = False
+
+[update_manager timelapse]
+type = git_repo
+primary_branch = main
+path = ~/moonraker-timelapse
+origin = https://github.com/mainsail-crew/moonraker-timelapse.git
+managed_services = klipper moonraker
+
 [power Printer]
 type = gpio
 pin = gpiochip0/gpio17
-off_when_shutdown = False
+off_when_shutdown = True
 on_when_job_queued = True
 locked_while_printing = True
 restart_klipper_when_powered = true
@@ -83,13 +89,18 @@ initial_state = off
 [power Lightbar]
 type = gpio
 pin = gpiochip0/gpio16
-off_when_shutdown = True
+off_when_shutdown = False
 on_when_job_queued = True
 restart_klipper_when_powered = false
 initial_state = off
 
 [job_queue]
 load_on_startup = True
+
+[timelapse]
+output_path = ~/printer_data/timelapse/
+frame_path = /tmp/timelapse/
+ffmpeg_binary_path = /usr/bin/ffmpeg
 
 [update_manager crowsnest]
 type = git_repo
@@ -105,15 +116,16 @@ env = /home/pi/.KlipperScreen-env/bin/python
 requirements = scripts/KlipperScreen-requirements.txt
 install_script = scripts/KlipperScreen-install.sh
 
-[update_manager timelapse]
+[update_manager led_effect]
 type = git_repo
-primary_branch = main
-path = ~/moonraker-timelapse
-origin = https://github.com/mainsail-crew/moonraker-timelapse.git
-managed_services = klipper moonraker
+path = ~/klipper-led_effect
+origin = https://github.com/julianschill/klipper-led_effect.git
+is_system_service = False
 
-[timelapse]
-output_path = ~/printer_data/timelapse/
-frame_path = /tmp/timelapse/
-ffmpeg_binary_path = /usr/bin/ffmpeg
+[update_manager ercf-happy_hare]
+type = git_repo
+path = ~/ERCF-Software-V3
+origin = https://github.com/moggieuk/ERCF-Software-V3.git
+install_script = install.sh
+managed_services = klipper
 
